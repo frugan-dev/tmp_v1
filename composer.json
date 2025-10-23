@@ -1,0 +1,81 @@
+{
+  "name": "wordpress-theme/v1",
+  "description": "WordPress starter theme with a modern development workflow",
+  "license": "MIT",
+  "type": "wordpress-theme",
+  "keywords": [
+    "wordpress"
+  ],
+  "authors": [
+    {
+      "name": "Ben Word",
+      "email": "ben@benword.com",
+      "homepage": "https://github.com/retlehs"
+    },
+    {
+      "name": "Scott Walkinshaw",
+      "email": "scott.walkinshaw@gmail.com",
+      "homepage": "https://github.com/swalkinshaw"
+    },
+    {
+      "name": "QWp6t",
+      "email": "hi@qwp6t.me",
+      "homepage": "https://github.com/qwp6t"
+    },
+    {
+      "name": "Brandon Nifong",
+      "email": "brandon@tendency.me",
+      "homepage": "https://github.com/log1x"
+    }
+  ],
+  "homepage": "https://roots.io/sage/",
+  "support": {
+    "issues": "https://github.com/roots/sage/issues",
+    "forum": "https://discourse.roots.io/"
+  },
+  "require": {
+    "php": ">=8.2",
+    "cweagans/composer-patches": "^1.7",
+    "generoi/sage-woocommerce": "^1.1",
+    "laravel-lang/common": "^6.7",
+    "propaganistas/laravel-phone": "^6.0",
+    "roots/acorn": "^5.0",
+    "spatie/laravel-honeypot": "^4.6",
+    "thecodingmachine/safe": "^3.3",
+    "umpirsky/country-list": "^2.0"
+  },
+  "require-dev": {
+    "ergebnis/composer-normalize": "^2.48",
+    "laravel/pint": "^1.20"
+  },
+  "suggest": {
+    "log1x/sage-directives": "A collection of useful Blade directives for WordPress and Sage (^1.0)."
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    },
+    "files": [
+      "app/helpers.php"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "cweagans/composer-patches": true,
+      "ergebnis/composer-normalize": true
+    },
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "extra": {
+    "patches-file": "patches.json"
+  },
+  "scripts": {
+    "post-autoload-dump": [
+      "Roots\\Acorn\\ComposerScripts::postAutoloadDump"
+    ]
+  }
+}

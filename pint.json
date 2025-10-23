@@ -1,0 +1,17 @@
+{
+    "preset": "laravel",
+    "exclude": [
+        "node_modules",
+        "patches",
+        "public",
+        "resources/lang",
+        "vendor"
+    ],
+    "rules": {
+        "@PHP82Migration:risky": true,
+        "@PHP84Migration": true,
+        "header_comment": {
+            "header": "This file is part of the Sage theme.\n\n(ɔ) Frugan <dev@frugan.it>\n\nThis source file is subject to the GNU GPLv3 license that is bundled\nwith this source code in the file COPYING."
+        }
+    }
+}

@@ -1,0 +1,152 @@
+stages:
+  - build
+  - test
+  - package
+  - release
+
+# https://github.com/rickstaa/action-contains-tag
+# https://stackoverflow.com/a/15806668/3929620
+# https://stackoverflow.com/a/66450929/3929620
+# A tag is simply a reference to a commit, it has no relation to a branch.
+# A commit may be part of the history of many branches, or none at all.
+# If CI/CD variables are set to "Protected" (Settings > CI/CD > Variables), 
+# you need to create protect tags (Settings > Repository > Protected tags > v*).
+.only_release: &only_release
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+
+# If CI/CD variables are set to "Protected" (Settings > CI/CD > Variables), 
+# you need to create protect branches (Settings > Repository > Protected branches).
+.exclude_release: &exclude_release
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+      when: never
+    - if: '$CI_COMMIT_BRANCH'
+      when: always
+
+.only_manual: &only_manual
+  when: manual
+  manual_confirmation: ''
+
+install:php:
+  image: php:8.4-cli
+  stage: build
+  # https://docs.gitlab.com/ci/caching/#cache-php-dependencies
+  cache:
+    key:
+      files:
+        - composer.lock
+      prefix: ${CI_JOB_NAME_SLUG}
+    paths:
+      - vendor/
+  script:
+    - apt-get update && apt-get install -y unzip git
+    - docker-php-ext-install bcmath
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - composer install --optimize-autoloader --classmap-authoritative --no-dev --no-interaction
+  artifacts:
+    paths:
+      - vendor/
+    expire_in: 1 day
+  <<: *only_release
+
+install:js:
+  image: node:20
+  stage: build
+  # https://docs.gitlab.com/ci/caching/#cache-nodejs-dependencies
+  # https://stackoverflow.com/a/69744855/3929620
+  cache:
+    key:
+      files:
+        - package-lock.json
+      prefix: ${CI_JOB_NAME_SLUG}
+    paths:
+      - .npm/
+  script:
+    # The project must have an existing package-lock.json or npm-shrinkwrap.json
+    - npm ci --cache .npm --prefer-offline
+    - npm run build
+  artifacts:
+    paths:
+      - public/
+    expire_in: 1 day
+  <<: *only_release
+
+crowdin:upload:
+  image: node:latest
+  stage: build
+  # https://docs.gitlab.com/ci/caching/#cache-nodejs-dependencies
+  # https://stackoverflow.com/a/69744855/3929620
+  cache:
+    key: ${CI_JOB_NAME_SLUG}
+    paths:
+      - .npm/
+  script:
+    - npm install -g @crowdin/cli --cache .npm --prefer-offline
+    - crowdin upload sources
+  <<: *only_manual
+
+crowdin:download:
+  image: node:latest
+  stage: build
+  # https://docs.gitlab.com/ci/caching/#cache-nodejs-dependencies
+  # https://stackoverflow.com/a/69744855/3929620
+  cache:
+    key: ${CI_JOB_NAME_SLUG}
+    paths:
+      - .npm/
+  script:
+    - npm install -g @crowdin/cli --cache .npm --prefer-offline
+    - crowdin download --all
+    - apt-get update && apt-get install -y gettext
+    - find resources/lang -name "*.po" -exec sh -c 'msgfmt "$0" -o "${0%.po}.mo"' {} \;
+  artifacts:
+    paths:
+      - resources/lang/
+    expire_in: 1 day
+  <<: *only_release
+
+#test:
+#  image: php:8.4
+#  stage: test
+#  needs:
+#    - install
+#  script:
+#    - vendor/bin/phpunit
+
+package:
+  stage: package
+  image: alpine:latest
+  needs:
+    - install:php
+    - install:js
+    - crowdin:download
+  script:
+    - apk add --no-cache curl zip
+    - zip -r -x@exclude.lst ${CI_PROJECT_NAME}.zip .
+    - echo "PACKAGE_JOB_ID=$CI_JOB_ID" >> build.env
+    - |
+      curl --header "JOB-TOKEN: $CI_JOB_TOKEN" --upload-file ${CI_PROJECT_NAME}.zip \
+        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_TAG}/${CI_PROJECT_NAME}.zip"
+  artifacts:
+    paths:
+      - ${CI_PROJECT_NAME}.zip
+    reports:
+      dotenv: build.env
+  <<: *only_release
+
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  needs:
+    - package
+  script:
+    #- |
+    #  release-cli create --name "Release $CI_COMMIT_TAG" \
+    #    --tag-name "$CI_COMMIT_TAG" \
+    #    --assets-link "{\"name\":\"${CI_PROJECT_NAME}.zip\",\"url\":\"${CI_PROJECT_URL}/-/jobs/${PACKAGE_JOB_ID}/artifacts/raw/${CI_PROJECT_NAME}.zip\",\"link_type\":\"package\"}"
+    - |
+      release-cli create --name "Release $CI_COMMIT_TAG" \
+        --tag-name "$CI_COMMIT_TAG" \
+        --assets-link "{\"name\":\"${CI_PROJECT_NAME}.zip\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${CI_PROJECT_NAME}/${CI_COMMIT_TAG}/${CI_PROJECT_NAME}.zip\",\"link_type\":\"package\"}"
+  <<: *only_release

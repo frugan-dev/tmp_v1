@@ -1,0 +1,97 @@
+diff --git a/src/Illuminate/Foundation/Console/ChannelListCommand.php b/src/Illuminate/Foundation/Console/ChannelListCommand.php
+index 7063f1a..e289a8a 100644
+--- a/src/Illuminate/Foundation/Console/ChannelListCommand.php
++++ b/src/Illuminate/Foundation/Console/ChannelListCommand.php
+@@ -94,7 +94,7 @@ class ChannelListCommand extends Command
+             $dots = empty($dots) ? $dots : " $dots";
+ 
+             return sprintf(
+-                '  <fg=blue;options=bold>%s</> %s<fg=white>%s</><fg=#6C7280>%s</>',
++                '  <fg=yellow;options=bold>%s</> %s<fg=white>%s</><fg=#6C7280>%s</>',
+                 $channelName,
+                 $spaces,
+                 $resolver,
+@@ -123,7 +123,7 @@ class ChannelListCommand extends Command
+ 
+         $spaces = str_repeat(' ', $offset);
+ 
+-        return $spaces.'<fg=blue;options=bold>Showing ['.$channels->count().'] private channels</>';
++        return $spaces.'<fg=yellow;options=bold>Showing ['.$channels->count().'] private channels</>';
+     }
+ 
+     /**
+diff --git a/src/Illuminate/Foundation/Console/EventListCommand.php b/src/Illuminate/Foundation/Console/EventListCommand.php
+index b6dfd9f..3760af5 100644
+--- a/src/Illuminate/Foundation/Console/EventListCommand.php
++++ b/src/Illuminate/Foundation/Console/EventListCommand.php
+@@ -157,7 +157,7 @@ class EventListCommand extends Command
+         $interfaces = class_implements($event);
+ 
+         if (in_array(ShouldBroadcast::class, $interfaces)) {
+-            $event .= ' <fg=bright-blue>(ShouldBroadcast)</>';
++            $event .= ' <fg=yellow>(ShouldBroadcast)</>';
+         }
+ 
+         return $event;
+@@ -178,7 +178,7 @@ class EventListCommand extends Command
+         $listener = implode('@', $listener);
+ 
+         if (in_array(ShouldQueue::class, $interfaces)) {
+-            $listener .= ' <fg=bright-blue>(ShouldQueue)</>';
++            $listener .= ' <fg=yellow>(ShouldQueue)</>';
+         }
+ 
+         return $listener;
+diff --git a/src/Illuminate/Foundation/Console/RouteListCommand.php b/src/Illuminate/Foundation/Console/RouteListCommand.php
+index 36813d8..ac8ac19 100644
+--- a/src/Illuminate/Foundation/Console/RouteListCommand.php
++++ b/src/Illuminate/Foundation/Console/RouteListCommand.php
+@@ -63,7 +63,7 @@ class RouteListCommand extends Command
+      */
+     protected $verbColors = [
+         'ANY' => 'red',
+-        'GET' => 'blue',
++        'GET' => 'white',
+         'HEAD' => '#6C7280',
+         'OPTIONS' => '#6C7280',
+         'POST' => 'yellow',
+@@ -461,7 +461,7 @@ class RouteListCommand extends Command
+ 
+         $spaces = str_repeat(' ', $offset);
+ 
+-        return $spaces.'<fg=blue;options=bold>Showing ['.$routes->count().'] routes</>';
++        return $spaces.'<fg=yellow;options=bold>Showing ['.$routes->count().'] routes</>';
+     }
+ 
+     /**
+diff --git a/src/Roots/Acorn/Console/Commands/SummaryCommand.php b/src/Roots/Acorn/Console/Commands/SummaryCommand.php
+index c57d6ee..2f289f6 100644
+--- a/src/Roots/Acorn/Console/Commands/SummaryCommand.php
++++ b/src/Roots/Acorn/Console/Commands/SummaryCommand.php
+@@ -69,7 +69,7 @@ class SummaryCommand extends ListCommand
+     protected function title(OutputInterface $output)
+     {
+         $output->write(
+-            "\n  <fg=blue;options=bold>{$this->getApplication()->getVersion()}</>\n\n"
++            "\n  <fg=yellow;options=bold>{$this->getApplication()->getVersion()}</>\n\n"
+         );
+ 
+         return $this;
+@@ -82,7 +82,7 @@ class SummaryCommand extends ListCommand
+      */
+     protected function usage(OutputInterface $output)
+     {
+-        $output->write("  <fg=blue;options=bold>USAGE:</> {$this->binary} <command> [options] [arguments]\n");
++        $output->write("  <fg=yellow;options=bold>USAGE:</> {$this->binary} <command> [options] [arguments]\n");
+ 
+         return $this;
+     }
+@@ -114,7 +114,7 @@ class SummaryCommand extends ListCommand
+ 
+                 foreach ($commands as $command) {
+                     $output->write(sprintf(
+-                        "  <fg=blue>%s</>%s%s\n",
++                        "  <fg=yellow>%s</>%s%s\n",
+                         $command->getName(),
+                         str_repeat(' ', $this->width - mb_strlen($command->getName()) + 1),
+                         $command->getDescription()

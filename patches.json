@@ -1,0 +1,7 @@
+{
+    "patches": {
+        "roots/acorn": [
+            "patches/roots-acorn.patch"
+        ]
+    }
+}
