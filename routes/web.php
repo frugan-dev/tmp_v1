@@ -50,7 +50,7 @@ if (config('autosession.key') && config('autosession.expire')) {
             $expireObj = Carbon::parse(config('autosession.expire'));
 
             if ($nowObj->lte($expireObj)) {
-                session(['autosession_expire' => $expireObj->toDateTimeString()]);
+                session(['autosession.expire' => $expireObj->toDateTimeString()]);
 
                 Log::info('Autosession successful created');
             } else {

@@ -23,11 +23,9 @@ return [
                 return;
             }
 
-            sd(session()->all());
-
             // Check if autosession expire is active
-            if (session()->has('autosession_expire')) {
-                $expireStr = session('autosession_expire');
+            if (session()->has('autosession.expire')) {
+                $expireStr = session('autosession.expire');
 
                 if ($expireStr) {
                     $nowObj = \Illuminate\Support\Carbon::now();
@@ -36,23 +34,8 @@ return [
                     if ($nowObj->lte($expireObj)) {
                         return;
                     } else {
-                        session()->forget('autosession_expire');
+                        session()->forget('autosession.expire');
                     }
-                }
-            }
-
-            $allowedPaths = [
-                '/_autologin/',
-                '/_autosession/',
-                '/wp-admin/',
-                '/wp-login.php',
-            ];
-
-            $currentPath = $_SERVER['REQUEST_URI'] ?? '';
-
-            foreach ($allowedPaths as $path) {
-                if (str_starts_with($currentPath, $path)) {
-                    return;
                 }
             }
 

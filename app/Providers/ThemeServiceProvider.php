@@ -20,8 +20,6 @@ class ThemeServiceProvider extends SageServiceProvider
 {
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -30,14 +28,21 @@ class ThemeServiceProvider extends SageServiceProvider
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot(): void
     {
         parent::boot();
 
+        $this->initFront();
+
         $hookLoader = new HookLoader($this->app);
         $hookLoader->run();
+    }
+
+    public function initFront(): void
+    {
+        if (is_admin()) {
+            return;
+        }
     }
 }
