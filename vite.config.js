@@ -9,10 +9,10 @@ export default defineConfig({
     tailwindcss(),
     laravel({
       input: [
-        'resources/css/app.css',
-        'resources/js/app.js',
-        'resources/css/editor.css',
-        'resources/js/editor.js',
+        'resources/assets/css/app.css',
+        'resources/assets/js/app.js',
+        'resources/assets/css/editor.css',
+        'resources/assets/js/editor.js',
       ],
       refresh: true,
     }),
@@ -29,10 +29,10 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@scripts': '/resources/js',
-      '@styles': '/resources/css',
-      '@fonts': '/resources/fonts',
-      '@images': '/resources/images',
+      '@scripts': '/resources/assets/js',
+      '@styles': '/resources/assets/css',
+      '@fonts': '/resources/assets/fonts',
+      '@images': '/resources/assets/img',
     },
   },
 })

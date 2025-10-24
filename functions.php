@@ -63,7 +63,7 @@ Application::configure()
 |
 */
 
-collect(['setup', 'filters'])
+collect(['wc-template-hooks'])
     ->each(function ($file): void {
         if (! locate_template($file = "app/{$file}.php", true, true)) {
             wp_die(

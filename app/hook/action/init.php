@@ -11,6 +11,10 @@ declare(strict_types=1);
  * with this source code in the file COPYING.
  */
 
+if (! defined('WPINC')) {
+    exit;
+}
+
 return [
     [
         // Initialize Laravel session for WordPress frontend requests.
