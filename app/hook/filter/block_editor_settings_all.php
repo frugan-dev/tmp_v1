@@ -26,7 +26,7 @@ return [
          * @return array
          */
         'callback' => function (Container $container, $settings) {
-            $style = Vite::asset('resources/css/editor.css');
+            $style = Vite::asset('resources/assets/css/editor.css');
 
             $settings['styles'][] = [
                 'css' => "@import url('{$style}')",

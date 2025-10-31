@@ -13,6 +13,8 @@ export default defineConfig({
         'resources/assets/js/app.js',
         'resources/assets/css/editor.css',
         'resources/assets/js/editor.js',
+        'resources/assets/css/maintenance.css',
+        'resources/assets/js/maintenance.js',
       ],
       refresh: true,
     }),
@@ -27,6 +29,12 @@ export default defineConfig({
       disableTailwindFontSizes: false,
     }),
   ],
+  server: {
+    host: '0.0.0.0',
+    hmr: {
+      host: 'localhost',
+    },
+  },
   resolve: {
     alias: {
       '@scripts': '/resources/assets/js',

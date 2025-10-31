@@ -23,9 +23,9 @@ return [
             }
 
             // Check if user is logged in
-            if (is_user_logged_in()) {
+            /*if (is_user_logged_in()) {
                 return;
-            }
+            }*/
 
             // Check if autosession expire is active
             if (session()->has('autosession.expire')) {

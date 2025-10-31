@@ -38,7 +38,7 @@ return [
             }
 
             echo Vite::withEntryPoints([
-                'resources/js/editor.js',
+                'resources/assets/js/editor.js',
             ])->toHtml();
         },
         'accepted_args' => 0,

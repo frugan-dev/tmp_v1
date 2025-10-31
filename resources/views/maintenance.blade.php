@@ -1,51 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex, nofollow">
-    <title>Site under maintenance</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@extends('layouts.maintenance')
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+@section('content')
+<div class="flex flex-col items-center justify-center min-h-screen bg-[radial-gradient(circle_at_center,white_0%,white_10%,var(--color-light-gray)_50%)] text-center py-6">
+    <h1>Dissipatore alimentare.</h1>
+    <h2 class="h1">Semplicemente, <span class="text-primary">Gully.</span></h2>
 
-        .container {
-            text-align: center;
-            padding: 2rem;
-            max-width: 600px;
-        }
-
-        h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            margin: 0 0 1rem 0;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        p {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Site under maintenance</h1>
-        <p>We'll be back soon!</p>
+    <div class="w-full h-120 md:max-w-4xl md:h-auto my-6 overflow-hidden">
+        <img class="h-full w-auto object-cover md:w-full md:h-auto" src="{{ Vite::asset('resources/assets/img/maintenance/gully.jpg') }}" alt="">
     </div>
-</body>
-</html>
+
+    <p class="text-h3">Facile da installare e da usare.</p>
+    <p class="h3">Si adatta ad ogni tipo di lavello.</p>
+</div>
+@endsection

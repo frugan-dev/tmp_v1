@@ -33,13 +33,13 @@ class ThemeServiceProvider extends SageServiceProvider
     {
         parent::boot();
 
-        $this->initFront();
+        $this->init();
 
         $hookLoader = new HookLoader($this->app);
         $hookLoader->run();
     }
 
-    public function initFront(): void
+    public function init(): void
     {
         if (is_admin()) {
             return;
